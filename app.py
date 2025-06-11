@@ -8,29 +8,17 @@ init_db()
 
 # Menu items
 menu_items = {
-    'Coffee': {
-        'americano': {'id': 'americano', 'name': 'Americano'},
-        'latte': {'id': 'latte', 'name': 'Latte'},
-        'espresso': {'id': 'espresso', 'name': 'Espresso'},
-        'cappuccino': {'id': 'cappuccino', 'name': 'Cappuccino'}
+    'Coffee & Espresso': {
+        'single_espresso': {'id': 'single_espresso', 'name': 'Single Espresso', 'arabic': 'إسبريسو مفرد'},
+        'double_espresso': {'id': 'double_espresso', 'name': 'Double Espresso', 'arabic': 'إسبريسو مزدوج'},
+        'americano': {'id': 'americano', 'name': 'Americano', 'arabic': 'أمريكانو'},
+        'cappuccino': {'id': 'cappuccino', 'name': 'Cappuccino', 'arabic': 'كابتشينو'},
+        'flat_white': {'id': 'flat_white', 'name': 'Flat White', 'arabic': 'فلات وايت'},
+        'spanish_latte': {'id': 'spanish_latte', 'name': 'Spanish Latte', 'arabic': 'سبانيش لاتيه'}
     },
-    'Tea': {
-        'green': {'id': 'green', 'name': 'Green Tea'},
-        'black': {'id': 'black', 'name': 'Black Tea'},
-        'earl_grey': {'id': 'earl_grey', 'name': 'Earl Grey'},
-        'chamomile': {'id': 'chamomile', 'name': 'Chamomile'}
-    },
-    'Fresh Juice': {
-        'orange': {'id': 'orange', 'name': 'Orange Juice'},
-        'apple': {'id': 'apple', 'name': 'Apple Juice'},
-        'carrot': {'id': 'carrot', 'name': 'Carrot Juice'},
-        'mixed': {'id': 'mixed', 'name': 'Mixed Fruit Juice'}
-    },
-    'Cold Drinks': {
-        'cola': {'id': 'cola', 'name': 'Cola'},
-        'sprite': {'id': 'sprite', 'name': 'Sprite'},
-        'fanta': {'id': 'fanta', 'name': 'Fanta'},
-        'water': {'id': 'water', 'name': 'Mineral Water'}
+    'Specialty Drinks': {
+        'rubicon_coconut_water': {'id': 'rubicon_coconut_water', 'name': 'Rubicon Organic Coconut Water', 'arabic': 'ماء جوز الهند العضوي من روبيكون'},
+        'vitamin_well_care': {'id': 'vitamin_well_care', 'name': 'Vitamin Well Care Drink', 'arabic': 'مشروب فيتامين ويل – كير'}
     }
 }
 
@@ -85,7 +73,15 @@ def get_item_name(item_id):
             return category[item_id]['name']
     return item_id
 
-app.jinja_env.globals.update(get_item_name=get_item_name)
+def get_item_display_name(item_id):
+    """Helper function to get bilingual display name for items"""
+    for category in menu_items.values():
+        if item_id in category:
+            item = category[item_id]
+            return f"{item['name']} ({item['arabic']})"
+    return item_id
+
+app.jinja_env.globals.update(get_item_name=get_item_name, get_item_display_name=get_item_display_name)
 
 if __name__ == '__main__':
     app.run(debug=True) 

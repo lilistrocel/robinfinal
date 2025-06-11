@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafe Order System</title>
+    <title>Digital Majlis Menu</title>
     <!-- Google Font: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -18,6 +18,11 @@
         .navbar {
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .navbar-brand img {
             height: 51px;
@@ -166,14 +171,19 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Cafe Logo">
+                <img src="{{ url_for('static', filename='images/Llogo.svg') }}" alt="L Logo">
+                <img src="{{ url_for('static', filename='images/Klogo.svg') }}" alt="K Logo">
             </a>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <div class="hero-section">
-        <h1>Cafe Menu</h1>
+        <div class="text-center">
+            <h1>Digital Majlis Menu</h1>
+            <p class="mb-1" style="font-size: 1rem; color: #306873; margin-top: 0.5rem;">An immersive afternoon tea blending old-world charm with next-gen service</p>
+            <p class="mb-0" style="font-size: 0.9rem; color: #5cacae; font-weight: 600;">شاي بعد الظهر بلمسة غامرة تمزج بين سحر العالم القديم وخدمة الجيل الجديد</p>
+        </div>
     </div>
 
     <div class="container">
@@ -186,7 +196,10 @@
                         <div class="menu-items">
                             {% for item_id, item in items.items() %}
                             <div class="menu-item">
-                                <span>{{ item.name }}</span>
+                                <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                    <span style="font-weight: 600;">{{ item.name }}</span>
+                                    <span style="font-size: 0.85rem; color: #5cacae; font-weight: 500;">{{ item.arabic }}</span>
+                                </div>
                                 <div class="quantity-control">
                                     <button onclick="updateQuantity('{{ item.id }}', -1)" class="quantity-btn">-</button>
                                     <span id="quantity-{{ item.id }}" class="quantity-display">0</span>

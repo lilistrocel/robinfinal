@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplier Dashboard</title>
+    <title>Digital Majlis - Supplier Dashboard</title>
     <!-- Google Font: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -18,6 +18,11 @@
         .navbar {
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .navbar-brand img {
             height: 51px;
@@ -136,14 +141,18 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Cafe Logo">
+                <img src="{{ url_for('static', filename='images/Llogo.svg') }}" alt="L Logo">
+                <img src="{{ url_for('static', filename='images/Klogo.svg') }}" alt="K Logo">
             </a>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <div class="hero-section">
-        <h1>Supplier Dashboard</h1>
+        <div class="text-center">
+            <h1>Digital Majlis - Supplier Dashboard</h1>
+            <p class="mb-0" style="font-size: 0.9rem; color: #306873; margin-top: 0.5rem;">Managing orders for the immersive afternoon tea experience</p>
+        </div>
     </div>
 
     <div class="container">
@@ -175,7 +184,7 @@
                 <div class="order-items">
                     {% for item_id, quantity in order['items'].items() %}
                     <div class="item-row">
-                        <span>{{ get_item_name(item_id) }}</span>
+                        <span>{{ get_item_display_name(item_id) }}</span>
                         <span>Quantity: {{ quantity }}</span>
                     </div>
                     {% endfor %}
@@ -219,7 +228,7 @@
                 <div class="order-items">
                     {% for item_id, quantity in order['items'].items() %}
                     <div class="item-row">
-                        <span>{{ get_item_name(item_id) }}</span>
+                        <span>{{ get_item_display_name(item_id) }}</span>
                         <span>Quantity: {{ quantity }}</span>
                     </div>
                     {% endfor %}

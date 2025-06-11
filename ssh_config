@@ -1,0 +1,7 @@
+Host cafe-server
+    HostName ec2-3-29-211-236.me-central-1.compute.amazonaws.com
+    User ubuntu
+    IdentityFile "C:\Users\lilis\Documents\CodeBase\robinfinal\Cofe+.pem"
+    Port 22
+    ServerAliveInterval 60
+    ServerAliveCountMax 3 

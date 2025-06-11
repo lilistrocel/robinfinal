@@ -38,6 +38,10 @@ EOF
 # Remove default Nginx configuration
 sudo rm -f /etc/nginx/conf.d/default.conf
 
+# Remove default site Nginx configuration
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo rm -f /etc/nginx/sites-available/default
+
 # Restart Nginx
 sudo systemctl restart nginx
 
@@ -47,11 +51,11 @@ sudo systemctl start supervisord
 sudo systemctl enable supervisord
 
 # Create Supervisor configuration for the application
-sudo tee /etc/supervisord.d/cafe.ini << EOF
+sudo tee /etc/supervisor.d/cafe.ini << EOF
 [program:cafe]
-directory=/home/ec2-user/cafe-order-system
-command=/home/ec2-user/cafe-order-system/venv/bin/gunicorn -w 4 -b 127.0.0.1:5000 app:app
-user=ec2-user
+directory=/home/ubuntu/robinfinal
+command=/home/ubuntu/robinfinal/venv/bin/gunicorn -w 4 -b 127.0.0.1:5000 app:app
+user=ubuntu
 autostart=true
 autorestart=true
 stopasgroup=true
