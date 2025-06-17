@@ -203,7 +203,7 @@
                 </div>
                 <div class="order-info">
                     <div>
-                        <strong>Time:</strong> {{ order.timestamp }}
+                        <strong>Time:</strong> {{ order.timestamp | dubai_time }}
                     </div>
                     <div>
                         <strong>Table:</strong> {{ order.table_number }}
@@ -247,7 +247,7 @@
                 </div>
                 <div class="order-info">
                     <div>
-                        <strong>Time:</strong> {{ order.timestamp }}
+                        <strong>Time:</strong> {{ order.timestamp | dubai_time }}
                     </div>
                     <div>
                         <strong>Table:</strong> {{ order.table_number }}
@@ -311,7 +311,9 @@
 
         function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleString();
+            // Convert to Dubai time (UTC+4)
+            const dubaiTime = new Date(date.getTime() + (4 * 60 * 60 * 1000));
+            return dubaiTime.toLocaleString('en-AE', { timeZone: 'Asia/Dubai' });
         }
 
         function createOrderCard(order) {
@@ -325,72 +327,4 @@
                         <span>${itemId}</span>
                         <span>Quantity: ${quantity}</span>
                     </div>
-                `;
-            }
-
-            card.innerHTML = `
-                <div class="card-header">
-                    Order #${order.id}
-                </div>
-                <div class="order-info">
-                    <div>
-                        <strong>Time:</strong> ${formatDate(order.timestamp)}
-                    </div>
-                    <div>
-                        <strong>Table:</strong> ${order.table_number}
-                    </div>
-                    <div>
-                        <span class="status-badge status-${order.status}">
-                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
-                    </div>
-                </div>
-                <div class="order-items">
-                    ${itemsHtml}
-                    ${order.extra_request ? `
-                        <div class="extra-request mt-3 pt-3" style="border-top: 1px solid #e5fbfe;">
-                            <strong>Special Request:</strong>
-                            <p class="mb-0 text-muted">${order.extra_request}</p>
-                        </div>
-                    ` : ''}
-                </div>
-                ${order.status === 'pending' ? `
-                    <div class="p-3 text-end">
-                        <button onclick="completeOrder(${order.id})" class="btn-complete">
-                            Mark as Complete
-                        </button>
-                    </div>
-                ` : ''}`;
-
-            return card;
-        }
-
-        function refreshOrders() {
-            fetch('/api/orders')
-                .then(response => response.json())
-                .then(orders => {
-                    // Clear existing orders
-                    const pendingContainer = document.getElementById('pending-tasks');
-                    const completedContainer = document.getElementById('completed-tasks');
-                    pendingContainer.innerHTML = '';
-                    completedContainer.innerHTML = '';
-
-                    // Add new orders
-                    orders.forEach(order => {
-                        const container = order.status === 'pending' ? pendingContainer : completedContainer;
-                        container.appendChild(createOrderCard(order));
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching orders:', error);
-                });
-        }
-
-        // Initial load
-        refreshOrders();
-
-        // Refresh every 5 seconds
-        setInterval(refreshOrders, 5000);
-    </script>
-</body>
-</html> 
+                `

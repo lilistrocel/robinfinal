@@ -1,10 +1,27 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from models import init_db, get_orders, create_order, complete_order
+from datetime import datetime
+import pytz
 
 app = Flask(__name__)
 
 # Initialize database
 init_db()
+
+@app.template_filter('dubai_time')
+def dubai_time_filter(timestamp):
+    """Convert UTC timestamp to Dubai time."""
+    if isinstance(timestamp, str):
+        try:
+            # Try parsing with microseconds
+            timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+        except ValueError:
+            # If no microseconds, try without them
+            timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+    utc = pytz.UTC.localize(timestamp)
+    dubai_tz = pytz.timezone('Asia/Dubai')
+    dubai_time = utc.astimezone(dubai_tz)
+    return dubai_time.strftime('%Y-%m-%d %H:%M:%S')
 
 # Menu items
 menu_items = {
