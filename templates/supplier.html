@@ -322,9 +322,104 @@
             
             let itemsHtml = '';
             for (const [itemId, quantity] of Object.entries(order.items)) {
+                const displayName = getItemDisplayName(itemId);
                 itemsHtml += `
                     <div class="item-row">
-                        <span>${itemId}</span>
+                        <span>${displayName}</span>
                         <span>Quantity: ${quantity}</span>
                     </div>
-                `
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="card-header">
+                    Order #${order.id}
+                </div>
+                <div class="order-info">
+                    <div>
+                        <strong>Time:</strong> ${formatDate(order.timestamp)}
+                    </div>
+                    <div>
+                        <strong>Table:</strong> ${order.table_number}
+                    </div>
+                    <div>
+                        <span class="status-badge status-${order.status}">
+                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                    </div>
+                </div>
+                <div class="order-items">
+                    ${itemsHtml}
+                    ${order.extra_request ? `
+                        <div class="extra-request mt-3 pt-3" style="border-top: 1px solid #e5fbfe;">
+                            <strong>Special Request:</strong>
+                            <p class="mb-0 text-muted">${order.extra_request}</p>
+                        </div>
+                    ` : ''}
+                </div>
+                ${order.status === 'pending' ? `
+                    <div class="p-3 text-end">
+                        <button onclick="completeOrder(${order.id})" class="btn-complete">
+                            Mark as Complete
+                        </button>
+                    </div>
+                ` : ''}`;
+
+            return card;
+        }
+
+        // Helper function to get item display name
+        function getItemDisplayName(itemId) {
+            const menuItems = {
+                'Coffee & Espresso': {
+                    'single_espresso': {'name': 'Single Espresso', 'arabic': 'إسبريسو مفرد'},
+                    'double_espresso': {'name': 'Double Espresso', 'arabic': 'إسبريسو مزدوج'},
+                    'americano': {'name': 'Americano', 'arabic': 'أمريكانو'},
+                    'cappuccino': {'name': 'Cappuccino', 'arabic': 'كابتشينو'},
+                    'flat_white': {'name': 'Flat White', 'arabic': 'فلات وايت'},
+                    'spanish_latte': {'name': 'Spanish Latte', 'arabic': 'سبانيش لاتيه'}
+                },
+                'Specialty Drinks': {
+                    'rubicon_coconut_water': {'name': 'Rubicon Organic Coconut Water', 'arabic': 'ماء جوز الهند العضوي من روبيكون'},
+                    'vitamin_well_care': {'name': 'Vitamin Well Care Drink', 'arabic': 'مشروب فيتامين ويل – كير'}
+                }
+            };
+
+            for (const category of Object.values(menuItems)) {
+                if (itemId in category) {
+                    const item = category[itemId];
+                    return `${item.name} (${item.arabic})`;
+                }
+            }
+            return itemId;
+        }
+
+        function refreshOrders() {
+            fetch('/api/orders')
+                .then(response => response.json())
+                .then(orders => {
+                    // Clear existing orders
+                    const pendingContainer = document.getElementById('pending-tasks');
+                    const completedContainer = document.getElementById('completed-tasks');
+                    pendingContainer.innerHTML = '';
+                    completedContainer.innerHTML = '';
+
+                    // Add new orders
+                    orders.forEach(order => {
+                        const container = order.status === 'pending' ? pendingContainer : completedContainer;
+                        container.appendChild(createOrderCard(order));
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                });
+        }
+
+        // Initial load
+        refreshOrders();
+
+        // Refresh every 5 seconds
+        setInterval(refreshOrders, 5000);
+    </script>
+</body>
+</html>
