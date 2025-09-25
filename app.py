@@ -25,17 +25,27 @@ def dubai_time_filter(timestamp):
 
 # Menu items
 menu_items = {
-    'Coffee & Espresso': {
-        'single_espresso': {'id': 'single_espresso', 'name': 'Single Espresso', 'arabic': 'إسبريسو مفرد'},
-        'double_espresso': {'id': 'double_espresso', 'name': 'Double Espresso', 'arabic': 'إسبريسو مزدوج'},
-        'americano': {'id': 'americano', 'name': 'Americano', 'arabic': 'أمريكانو'},
-        'cappuccino': {'id': 'cappuccino', 'name': 'Cappuccino', 'arabic': 'كابتشينو'},
-        'flat_white': {'id': 'flat_white', 'name': 'Flat White', 'arabic': 'فلات وايت'},
-        'spanish_latte': {'id': 'spanish_latte', 'name': 'Spanish Latte', 'arabic': 'سبانيش لاتيه'}
+    'Water': {
+        'lemon_mint_juice': {'id': 'lemon_mint_juice', 'name': 'A glass of fresh lemon and mint juice', 'arabic': 'كوب من عصير الليمون والنعناع الطازج'},
+        'orange_juice': {'id': 'orange_juice', 'name': 'A glass of orange juice', 'arabic': 'كوب من عصير البرتقال'},
+        'mai_sparkling': {'id': 'mai_sparkling', 'name': 'Mai Dubai Sparkling Water - 330ml glass bottle', 'arabic': 'ماي دبي المياه الغازية - زجاجة 330 مل'},
+        'mai_still': {'id': 'mai_still', 'name': 'Mai Dubai Still Water - 330ml glass bottle', 'arabic': 'ماي دبي المياه العادية - زجاجة 330 مل'}
     },
-    'Specialty Drinks': {
-        'rubicon_coconut_water': {'id': 'rubicon_coconut_water', 'name': 'Rubicon Organic Coconut Water', 'arabic': 'ماء جوز الهند العضوي من روبيكون'},
-        'vitamin_well_care': {'id': 'vitamin_well_care', 'name': 'Vitamin Well Care Drink', 'arabic': 'مشروب فيتامين ويل – كير'}
+    'Tea': {
+        'assam': {'id': 'assam', 'name': 'Assam', 'arabic': 'آسام', 'options': ['sugar', 'milk']},
+        'earl_gray': {'id': 'earl_gray', 'name': 'Earl Gray', 'arabic': 'إيرل جراي', 'options': ['sugar', 'milk']},
+        'english_breakfast': {'id': 'english_breakfast', 'name': 'English Breakfast', 'arabic': 'الإفطار الإنجليزي', 'options': ['sugar', 'milk']},
+        'green_sencha': {'id': 'green_sencha', 'name': 'Green Sencha', 'arabic': 'الشاي الأخضر سينشا', 'options': ['sugar', 'milk']},
+        'jasmin_blossom': {'id': 'jasmin_blossom', 'name': 'Jasmin Blossom', 'arabic': 'زهر الياسمين', 'options': ['sugar', 'milk']},
+        'masala_chai': {'id': 'masala_chai', 'name': 'Masala Chai', 'arabic': 'تشاي ماسالا', 'options': ['sugar', 'milk']},
+        'moroccan_nights': {'id': 'moroccan_nights', 'name': 'Moroccan Nights', 'arabic': 'الليالي المغربية', 'options': ['sugar', 'milk']},
+        'rosehip_hibiscus': {'id': 'rosehip_hibiscus', 'name': 'Rosehip & Hibiscus', 'arabic': 'ورد البري والكركديه', 'options': ['sugar', 'milk']}
+    },
+    'Coffee': {
+        'americano': {'id': 'americano', 'name': 'Americano', 'arabic': 'أمريكانو', 'options': ['sugar']},
+        'latte': {'id': 'latte', 'name': 'Latte', 'arabic': 'لاتيه', 'options': ['sugar']},
+        'cappuccino': {'id': 'cappuccino', 'name': 'Cappuccino', 'arabic': 'كابتشينو', 'options': ['sugar']},
+        'espresso': {'id': 'espresso', 'name': 'Espresso', 'arabic': 'إسبريسو', 'options': ['sugar']}
     }
 }
 

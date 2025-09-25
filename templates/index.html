@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Majlis Menu</title>
+    <title>K2 - GITEX beverage menu</title>
     <!-- Google Font: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -238,7 +238,6 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', filename='images/Llogo.svg') }}" alt="L Logo">
                 <img src="{{ url_for('static', filename='images/Klogo.svg') }}" alt="K Logo">
             </a>
         </div>
@@ -247,7 +246,7 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="text-center">
-            <h1>Digital Majlis Menu</h1>
+            <h1>K2 - GITEX beverage menu</h1>
             <p class="mb-1" style="font-size: 1rem; color: #306873; margin-top: 0.5rem;">An immersive afternoon tea blending old-world charm with next-gen service</p>
             <p class="mb-0" style="font-size: 0.9rem; color: #5cacae; font-weight: 600;">شاي بعد الظهر بلمسة غامرة تمزج بين سحر العالم القديم وخدمة الجيل الجديد</p>
         </div>
@@ -266,6 +265,16 @@
                                 <div class="menu-item-text">
                                     <div style="font-weight: 600; font-size: 1rem; color: #306873; margin-bottom: 0.25rem;">{{ item.name }}</div>
                                     <div style="font-size: 0.85rem; color: #5cacae; font-weight: 500; line-height: 1.3;">{{ item.arabic }}</div>
+                                    {% if item.get('options') %}
+                                    <div class="options-container" id="options-{{ item.id }}" style="margin-top: 0.5rem; display: none;">
+                                        {% for option in item.options %}
+                                        <label class="option-checkbox" style="display: inline-block; margin-right: 1rem; font-size: 0.8rem; color: #306873;">
+                                            <input type="checkbox" id="{{ item.id }}-{{ option }}" style="margin-right: 0.25rem;">
+                                            {{ option.title() }}
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 <div class="quantity-control">
                                     <button onclick="updateQuantity('{{ item.id }}', -1)" class="quantity-btn">-</button>
@@ -313,10 +322,30 @@
             
             quantityElement.textContent = quantity;
             
+            // Show/hide options container
+            const optionsContainer = document.getElementById(`options-${itemId}`);
+            if (optionsContainer) {
+                optionsContainer.style.display = quantity > 0 ? 'block' : 'none';
+            }
+            
             if (quantity === 0) {
                 delete cart[itemId];
+                // Reset all options when quantity is 0
+                if (optionsContainer) {
+                    const checkboxes = optionsContainer.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => checkbox.checked = false);
+                }
             } else {
-                cart[itemId] = quantity;
+                // Collect options
+                const options = [];
+                if (optionsContainer) {
+                    const checkboxes = optionsContainer.querySelectorAll('input[type="checkbox"]:checked');
+                    checkboxes.forEach(checkbox => {
+                        const optionName = checkbox.id.split('-').pop();
+                        options.push(optionName);
+                    });
+                }
+                cart[itemId] = { quantity: quantity, options: options };
             }
             
             updateCartSummary();
@@ -324,7 +353,9 @@
 
         // Update cart summary
         function updateCartSummary() {
-            const totalItems = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0);
+            const totalItems = Object.values(cart).reduce((sum, item) => {
+                return sum + (typeof item === 'object' ? item.quantity : item);
+            }, 0);
             document.getElementById('itemCount').textContent = totalItems;
             
             // Enable order button if there are items OR if there's an extra request
@@ -335,6 +366,16 @@
 
         // Add event listener for extra request input
         document.getElementById('extraRequest').addEventListener('input', updateCartSummary);
+
+        // Add event listeners for option checkboxes
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' && e.target.id.includes('-')) {
+                const itemId = e.target.id.split('-').slice(0, -1).join('-');
+                if (cart[itemId]) {
+                    updateQuantity(itemId, 0); // Trigger update without changing quantity
+                }
+            }
+        });
 
         // Place order
         function placeOrder() {
@@ -361,6 +402,13 @@
                     // Reset cart
                     Object.keys(cart).forEach(itemId => {
                         document.getElementById(`quantity-${itemId}`).textContent = '0';
+                        // Hide options and reset checkboxes
+                        const optionsContainer = document.getElementById(`options-${itemId}`);
+                        if (optionsContainer) {
+                            optionsContainer.style.display = 'none';
+                            const checkboxes = optionsContainer.querySelectorAll('input[type="checkbox"]');
+                            checkboxes.forEach(checkbox => checkbox.checked = false);
+                        }
                         delete cart[itemId];
                     });
                     // Reset extra request

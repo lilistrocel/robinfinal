@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Majlis - Supplier Dashboard</title>
+    <title>K2 - GITEX beverage menu - Supplier Dashboard</title>
     <!-- Google Font: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -174,7 +174,6 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', filename='images/Llogo.svg') }}" alt="L Logo">
                 <img src="{{ url_for('static', filename='images/Klogo.svg') }}" alt="K Logo">
             </a>
         </div>
@@ -183,7 +182,7 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="text-center">
-            <h1>Digital Majlis - Supplier Dashboard</h1>
+            <h1>K2 - GITEX beverage menu - Supplier Dashboard</h1>
             <p class="mb-0" style="font-size: 0.9rem; color: #306873; margin-top: 0.5rem;">Managing orders for the immersive afternoon tea experience</p>
         </div>
     </div>
@@ -215,10 +214,17 @@
                     </div>
                 </div>
                 <div class="order-items">
-                    {% for item_id, quantity in order['items'].items() %}
+                    {% for item_id, item_data in order['items'].items() %}
                     <div class="item-row">
-                        <span>{{ get_item_display_name(item_id) }}</span>
-                        <span>Quantity: {{ quantity }}</span>
+                        <div>
+                            <span>{{ get_item_display_name(item_id) }}</span>
+                            {% if item_data.options %}
+                            <div style="font-size: 0.85rem; color: #5cacae; margin-top: 0.25rem;">
+                                <strong>Options:</strong> {{ item_data.options | join(', ') }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <span>Quantity: {{ item_data.quantity }}</span>
                     </div>
                     {% endfor %}
                     {% if order.extra_request %}
@@ -259,10 +265,17 @@
                     </div>
                 </div>
                 <div class="order-items">
-                    {% for item_id, quantity in order['items'].items() %}
+                    {% for item_id, item_data in order['items'].items() %}
                     <div class="item-row">
-                        <span>{{ get_item_display_name(item_id) }}</span>
-                        <span>Quantity: {{ quantity }}</span>
+                        <div>
+                            <span>{{ get_item_display_name(item_id) }}</span>
+                            {% if item_data.options %}
+                            <div style="font-size: 0.85rem; color: #5cacae; margin-top: 0.25rem;">
+                                <strong>Options:</strong> {{ item_data.options | join(', ') }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <span>Quantity: {{ item_data.quantity }}</span>
                     </div>
                     {% endfor %}
                 </div>
@@ -321,11 +334,21 @@
             card.className = 'card';
             
             let itemsHtml = '';
-            for (const [itemId, quantity] of Object.entries(order.items)) {
+            for (const [itemId, itemData] of Object.entries(order.items)) {
                 const displayName = getItemDisplayName(itemId);
+                const quantity = typeof itemData === 'object' ? itemData.quantity : itemData;
+                const options = typeof itemData === 'object' && itemData.options ? itemData.options : [];
+                
                 itemsHtml += `
                     <div class="item-row">
-                        <span>${displayName}</span>
+                        <div>
+                            <span>${displayName}</span>
+                            ${options.length > 0 ? `
+                                <div style="font-size: 0.85rem; color: #5cacae; margin-top: 0.25rem;">
+                                    <strong>Options:</strong> ${options.join(', ')}
+                                </div>
+                            ` : ''}
+                        </div>
                         <span>Quantity: ${quantity}</span>
                     </div>
                 `;
@@ -371,17 +394,27 @@
         // Helper function to get item display name
         function getItemDisplayName(itemId) {
             const menuItems = {
-                'Coffee & Espresso': {
-                    'single_espresso': {'name': 'Single Espresso', 'arabic': 'إسبريسو مفرد'},
-                    'double_espresso': {'name': 'Double Espresso', 'arabic': 'إسبريسو مزدوج'},
-                    'americano': {'name': 'Americano', 'arabic': 'أمريكانو'},
-                    'cappuccino': {'name': 'Cappuccino', 'arabic': 'كابتشينو'},
-                    'flat_white': {'name': 'Flat White', 'arabic': 'فلات وايت'},
-                    'spanish_latte': {'name': 'Spanish Latte', 'arabic': 'سبانيش لاتيه'}
+                'Water': {
+                    'lemon_mint_juice': {'name': 'A glass of fresh lemon and mint juice', 'arabic': 'كوب من عصير الليمون والنعناع الطازج'},
+                    'orange_juice': {'name': 'A glass of orange juice', 'arabic': 'كوب من عصير البرتقال'},
+                    'mai_sparkling': {'name': 'Mai Dubai Sparkling Water - 330ml glass bottle', 'arabic': 'ماي دبي المياه الغازية - زجاجة 330 مل'},
+                    'mai_still': {'name': 'Mai Dubai Still Water - 330ml glass bottle', 'arabic': 'ماي دبي المياه العادية - زجاجة 330 مل'}
                 },
-                'Specialty Drinks': {
-                    'rubicon_coconut_water': {'name': 'Rubicon Organic Coconut Water', 'arabic': 'ماء جوز الهند العضوي من روبيكون'},
-                    'vitamin_well_care': {'name': 'Vitamin Well Care Drink', 'arabic': 'مشروب فيتامين ويل – كير'}
+                'Tea': {
+                    'assam': {'name': 'Assam', 'arabic': 'آسام'},
+                    'earl_gray': {'name': 'Earl Gray', 'arabic': 'إيرل جراي'},
+                    'english_breakfast': {'name': 'English Breakfast', 'arabic': 'الإفطار الإنجليزي'},
+                    'green_sencha': {'name': 'Green Sencha', 'arabic': 'الشاي الأخضر سينشا'},
+                    'jasmin_blossom': {'name': 'Jasmin Blossom', 'arabic': 'زهر الياسمين'},
+                    'masala_chai': {'name': 'Masala Chai', 'arabic': 'تشاي ماسالا'},
+                    'moroccan_nights': {'name': 'Moroccan Nights', 'arabic': 'الليالي المغربية'},
+                    'rosehip_hibiscus': {'name': 'Rosehip & Hibiscus', 'arabic': 'ورد البري والكركديه'}
+                },
+                'Coffee': {
+                    'americano': {'name': 'Americano', 'arabic': 'أمريكانو'},
+                    'latte': {'name': 'Latte', 'arabic': 'لاتيه'},
+                    'cappuccino': {'name': 'Cappuccino', 'arabic': 'كابتشينو'},
+                    'espresso': {'name': 'Espresso', 'arabic': 'إسبريسو'}
                 }
             };
 
