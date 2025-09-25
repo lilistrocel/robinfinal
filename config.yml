@@ -1,0 +1,7 @@
+tunnel: 7612c8a3-6f6d-4141-9e4c-9c67ff7c6f54
+credentials-file: C:\Users\lilis\.cloudflared\7612c8a3-6f6d-4141-9e4c-9c67ff7c6f54.json
+
+ingress:
+  - hostname: robinfinal.hydromods.org
+    service: http://localhost:5000
+  - service: http_status:404
