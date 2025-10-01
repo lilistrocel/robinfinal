@@ -4,7 +4,7 @@ A modern web-based beverage ordering system built with Flask and featuring real-
 
 ## 🚀 Quick Start
 
-### New PC Setup:
+### Windows PC Setup:
 ```bash
 git clone <your-repository-url>
 cd robinfinal
@@ -12,9 +12,22 @@ cd robinfinal
 .\run.ps1
 ```
 
+### Ubuntu PC Setup:
+```bash
+git clone <your-repository-url>
+cd robinfinal
+chmod +x setup.sh
+./setup.sh
+./run.sh
+```
+
 ### Daily Use:
 ```bash
-.\run.ps1  # Starts both Flask app and Cloudflare tunnel
+# Windows
+.\run.ps1
+
+# Ubuntu
+./run.sh
 ```
 
 ## 📱 Features
@@ -39,9 +52,14 @@ cd robinfinal
 
 ## 📚 Documentation
 
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete setup guide
-- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Commands cheat sheet
-- **[RUNNING.md](RUNNING.md)** - How to run the application
+### Windows:
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete Windows setup guide
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Windows commands cheat sheet
+- **[RUNNING.md](RUNNING.md)** - How to run on Windows
+
+### Ubuntu:
+- **[DEPLOYMENT_UBUNTU.md](DEPLOYMENT_UBUNTU.md)** - Complete Ubuntu setup guide
+- **[QUICK_REFERENCE_UBUNTU.md](QUICK_REFERENCE_UBUNTU.md)** - Ubuntu commands cheat sheet
 
 ## 🛠️ Tech Stack
 
@@ -68,9 +86,9 @@ robinfinal/
 
 ## 🔧 Requirements
 
-- Python 3.7+
-- Windows 10/11
-- Internet connection for Cloudflare tunnel
+- **Python 3.7+**
+- **Windows 10/11** or **Ubuntu 18.04+**
+- **Internet connection** for Cloudflare tunnel
 
 ## 📝 License
 
