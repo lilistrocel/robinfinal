@@ -48,10 +48,21 @@ def init_db():
                 order_id INTEGER NOT NULL,
                 item_id TEXT NOT NULL,
                 quantity INTEGER NOT NULL,
+                options TEXT,
                 FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
             )
         ''')
         logger.debug("Order items table created or already exists")
+        
+        # Add options column if it doesn't exist (for existing databases)
+        try:
+            cursor.execute('ALTER TABLE order_items ADD COLUMN options TEXT')
+            logger.debug("Added options column to existing order_items table")
+        except sqlite3.OperationalError as e:
+            if "duplicate column name" in str(e):
+                logger.debug("Options column already exists")
+            else:
+                logger.debug(f"Error adding options column: {e}")
         
         # Verify tables exist
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -86,12 +97,20 @@ def create_order(items, table_number, extra_request=None):
             logger.debug(f"Created order with ID: {order_id}")
             
             # Add order items
-            for item_id, quantity in items.items():
+            for item_id, item_data in items.items():
+                # Handle both old format (quantity as number) and new format (object with quantity and options)
+                if isinstance(item_data, dict):
+                    quantity = item_data.get('quantity', 0)
+                    options = json.dumps(item_data.get('options', [])) if item_data.get('options') else None
+                else:
+                    quantity = item_data
+                    options = None
+                
                 cursor.execute(
-                    'INSERT INTO order_items (order_id, item_id, quantity) VALUES (?, ?, ?)',
-                    (order_id, item_id, quantity)
+                    'INSERT INTO order_items (order_id, item_id, quantity, options) VALUES (?, ?, ?, ?)',
+                    (order_id, item_id, quantity, options)
                 )
-                logger.debug(f"Added item {item_id} with quantity {quantity} to order {order_id}")
+                logger.debug(f"Added item {item_id} with quantity {quantity} and options {options} to order {order_id}")
             
             conn.commit()
             return order_id
@@ -113,8 +132,18 @@ def get_orders():
             
             for order in all_orders:
                 # Get items for this order
-                cursor.execute('SELECT item_id, quantity FROM order_items WHERE order_id = ?', (order['id'],))
-                items = {row['item_id']: row['quantity'] for row in cursor.fetchall()}
+                cursor.execute('SELECT item_id, quantity, options FROM order_items WHERE order_id = ?', (order['id'],))
+                items = {}
+                for row in cursor.fetchall():
+                    item_data = {'quantity': row['quantity']}
+                    if row['options']:
+                        try:
+                            item_data['options'] = json.loads(row['options'])
+                        except json.JSONDecodeError:
+                            item_data['options'] = []
+                    else:
+                        item_data['options'] = []
+                    items[row['item_id']] = item_data
                 
                 orders.append({
                     'id': order['id'],
