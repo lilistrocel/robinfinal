@@ -1,94 +1,77 @@
-# Cafe Order System
+# K2 - GITEX Beverage Menu
 
-A simple web-based cafe order management system built with Flask. It features a customer-facing menu page for placing orders and a supplier dashboard for managing orders.
+A modern web-based beverage ordering system built with Flask and featuring real-time order management through Cloudflare tunnels.
 
-## Local Development Setup
+## 🚀 Quick Start
 
-1. Create a virtual environment:
+### New PC Setup:
 ```bash
-python -m venv venv
+git clone <your-repository-url>
+cd robinfinal
+.\setup.ps1
+.\run.ps1
 ```
 
-2. Activate the virtual environment:
-- Windows:
+### Daily Use:
 ```bash
-venv\Scripts\activate
-```
-- Linux/Mac:
-```bash
-source venv/bin/activate
+.\run.ps1  # Starts both Flask app and Cloudflare tunnel
 ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## 📱 Features
 
-4. Run the development server:
-```bash
-python app.py
-```
+- **Customer Interface**: Interactive beverage menu with options
+- **Supplier Dashboard**: Real-time order management
+- **Multi-language**: English and Arabic support
+- **Cloud Access**: Available worldwide via Cloudflare tunnel
+- **Real-time Updates**: Live order status monitoring
 
-The application will be available at http://localhost:5000
+## 🌐 Access URLs
 
-## AWS EC2 Deployment
+- **Customer Menu**: https://robinfinal.hydromods.org
+- **Supplier Dashboard**: https://robinfinal.hydromods.org/supplier
+- **Local Access**: http://localhost:5000
 
-1. Launch an Amazon Linux 2023 EC2 instance
-2. Configure security group to allow inbound traffic on port 80 (HTTP)
-3. Connect to your instance using SSH
-4. Copy all files to the instance:
-```bash
-scp -i your-key.pem -r cafe-order-system ec2-user@your-instance-ip:~
-```
+## 📋 Menu Categories
 
-5. SSH into your instance:
-```bash
-ssh -i your-key.pem ec2-user@your-instance-ip
-```
+1. **Refreshers**: Juices and water options
+2. **Tea**: 8 varieties with customizable sugar/milk
+3. **Coffee**: 4 varieties with sugar options
 
-6. Navigate to the project directory and run the deployment script:
-```bash
-cd cafe-order-system
-chmod +x deploy.sh
-./deploy.sh
-```
+## 📚 Documentation
 
-The application will be available at http://your-instance-ip
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete setup guide
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Commands cheat sheet
+- **[RUNNING.md](RUNNING.md)** - How to run the application
 
-## Features
+## 🛠️ Tech Stack
 
-- Customer Menu Page (/)
-  - Browse menu items by category
-  - Add/remove items from cart
-  - Place orders
-  - Real-time total calculation
+- **Backend**: Python Flask
+- **Database**: SQLite
+- **Frontend**: HTML, CSS, JavaScript (Bootstrap)
+- **Deployment**: Cloudflare Tunnels
+- **OS**: Windows
 
-- Supplier Dashboard (/supplier)
-  - View all orders
-  - Mark orders as completed
-  - Auto-refresh when new orders arrive
-  - Order status tracking
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-cafe-order-system/
+robinfinal/
 ├── app.py              # Main Flask application
+├── models.py           # Database models
 ├── requirements.txt    # Python dependencies
-├── deploy.sh          # AWS EC2 deployment script
-├── static/            # Static files (if any)
-└── templates/         # HTML templates
-    ├── index.html     # Customer menu page
-    └── supplier.html  # Supplier dashboard
+├── config.yml         # Cloudflare tunnel config
+├── run.ps1            # Startup script
+├── setup.ps1          # Setup script
+├── templates/         # HTML templates
+├── static/           # CSS, JS, images
+└── instance/         # SQLite database
 ```
 
-## Notes
+## 🔧 Requirements
 
-- This is a basic implementation using in-memory storage
-- For production use, consider adding:
-  - Database integration
-  - User authentication
-  - HTTPS support
-  - Error handling
-  - Logging
-  - Backup system 
+- Python 3.7+
+- Windows 10/11
+- Internet connection for Cloudflare tunnel
+
+## 📝 License
+
+This project is for K2 - GITEX event use.
