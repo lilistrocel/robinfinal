@@ -25,11 +25,11 @@ def dubai_time_filter(timestamp):
 
 # Menu items
 menu_items = {
-    'Water': {
-        'lemon_mint_juice': {'id': 'lemon_mint_juice', 'name': 'A glass of fresh lemon and mint juice', 'arabic': 'كوب من عصير الليمون والنعناع الطازج'},
-        'orange_juice': {'id': 'orange_juice', 'name': 'A glass of orange juice', 'arabic': 'كوب من عصير البرتقال'},
-        'mai_sparkling': {'id': 'mai_sparkling', 'name': 'Mai Dubai Sparkling Water - 330ml glass bottle', 'arabic': 'ماي دبي المياه الغازية - زجاجة 330 مل'},
-        'mai_still': {'id': 'mai_still', 'name': 'Mai Dubai Still Water - 330ml glass bottle', 'arabic': 'ماي دبي المياه العادية - زجاجة 330 مل'}
+    'Refreshers': {
+        'lemon_mint_juice': {'id': 'lemon_mint_juice', 'name': 'Lemon and Mint Juice', 'arabic': 'عصير الليمون والنعناع'},
+        'orange_juice': {'id': 'orange_juice', 'name': 'Orange Juice', 'arabic': 'عصير البرتقال'},
+        'sparkling_water': {'id': 'sparkling_water', 'name': 'Sparkling Water', 'arabic': 'المياه الغازية'},
+        'still_water': {'id': 'still_water', 'name': 'Still Water', 'arabic': 'المياه العادية'}
     },
     'Tea': {
         'assam': {'id': 'assam', 'name': 'Assam', 'arabic': 'آسام', 'options': ['sugar', 'milk']},
